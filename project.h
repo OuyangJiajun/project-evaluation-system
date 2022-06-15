@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-class Speaker
+class Project
 {
 public:
 	string m_Name;

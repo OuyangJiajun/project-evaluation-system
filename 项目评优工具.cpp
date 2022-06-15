@@ -1,5 +1,5 @@
 #include <iostream>
-#include "speechManager.h"
+#include "projectManager.h"
 #include <map>
 using namespace std;
 
@@ -7,12 +7,12 @@ using namespace std;
 int main()
 {
 	//创建管理类对象
-	SpeechManager sm;
+	ProjectManager pm;
 	
-	/*测试创建选手
-	for (map<int, Speaker>::iterator it = sm.m_Speaker.begin(); it != sm.m_Speaker.end(); it++)
+	/*测试创建项目
+	for (map<int, Project>::iterator it = pm.m_Project.begin(); it != pm.m_Project.end(); it++)
 	{
-		cout << "选手编号：" << it->first << "\t选手姓名：" << it->second.m_Name << "\t选手分数：" << "第一轮" << it->second.m_Score[0] << " 第二轮" << it->second.m_Score[1] << endl;;
+		cout << "项目编号：" << it->first << "\t项目名称：" << it->second.m_Name << "\t项目分数：" << "第一轮" << it->second.m_Score[0] << " 第二轮" << it->second.m_Score[1] << endl;;
 	}
 	*/
 
@@ -20,24 +20,24 @@ int main()
 
 	while (true)
 	{
-		sm.showMenu();
+		pm.showMenu();
 
 		cout << "请输入您的选择：" << endl;
 		cin >> choice;
 
 		switch (choice)
 		{
-		case 1://开始比赛
-			sm.startSpeech();
+		case 1://开始评优
+			pm.startEvaluation();
 			break;
 		case 2://查看记录
-			sm.showRecord();
+			pm.showRecord();
 			break;
 		case 3://清空记录
-			sm.clearRecord();
+			pm.clearRecord();
 			break;
 		case 0://退出系统
-			sm.exitSystem();
+			pm.exitSystem();
 			break;
 		default:
 			system("cls");//清屏

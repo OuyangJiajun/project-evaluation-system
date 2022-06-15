@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="演讲比赛流程管理系统.cpp">
+    <ClCompile Include="项目评优工具.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="speechManager.cpp">
+    <ClCompile Include="projectManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="speechManager.h">
+    <ClInclude Include="projectManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="speaker.h">
+    <ClInclude Include="project.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -139,12 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="speechManager.cpp" />
-    <ClCompile Include="演讲比赛流程管理系统.cpp" />
+    <ClCompile Include="projectManager.cpp" />
+    <ClCompile Include="项目评优工具.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="speaker.h" />
-    <ClInclude Include="speechManager.h" />
+    <ClInclude Include="project.h" />
+    <ClInclude Include="projectManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

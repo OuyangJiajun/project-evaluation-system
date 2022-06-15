@@ -7,19 +7,19 @@
 #include <functional>
 #include <numeric>
 #include <fstream>
-#include "speaker.h"
+#include "project.h"
 using namespace std;
 
-//演讲比赛管理类
-class SpeechManager
+//项目评优管理类
+class ProjectManager
 {
 public:
 
 	//构造
-	SpeechManager();
+	ProjectManager();
 
 	//析构
-	~SpeechManager();
+	~ProjectManager();
 
 	//展示菜单
 	void showMenu();
@@ -28,19 +28,19 @@ public:
 	void exitSystem();
 
 	//初始化函数
-	void initSpeech();
+	void initEvaluation();
 
-	//创建选手
-	void createSpeaker();
+	//创建项目
+	void createProject();
 
-	//开始比赛——全流程
-	void startSpeech();
+	//开始评优——全流程
+	void startEvaluation();
 
 	//抽签
-	void speechDraw();
+	void evaluationDraw();
 
-	//比赛评分并完成晋级
-	void speechContest();
+	//评分并完成晋级
+	void evaluationContest();
 
 	//显示晋级结果并改为第二轮
 	void showResult();
@@ -57,19 +57,19 @@ public:
 	//清空记录
 	void clearRecord();
 
-	//第一轮选手容器 12人
+	//第一轮项目容器 12
 	vector<int> v1;
 
-	//第二轮选手容器 6人
+	//第二轮项目容器 6
 	vector<int> v2;
 
-	//胜利选手容器 3人
+	//获胜项目容器 3
 	vector<int> vVictory;
 
-	//存放编号与对应的选手
-	map<int, Speaker> m_Speaker;
+	//存放编号与对应的项目
+	map<int, Project> m_Project;
 
-	//记录比赛轮数
+	//记录评优轮数
 	int m_Index;
 
 	//判断文件是否为空的标志

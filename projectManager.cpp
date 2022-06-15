@@ -1,85 +1,85 @@
-#include "speechManager.h"
+#include "projectManager.h"
 
-SpeechManager::SpeechManager()
+ProjectManager::ProjectManager()
 {
-	initSpeech();
-	createSpeaker();
+	initEvaluation();
+	createProject();
 	loadRecord();
 }
 
-SpeechManager::~SpeechManager()
+ProjectManager::~ProjectManager()
 {
 	
 }
 
-void SpeechManager::showMenu()
+void ProjectManager::showMenu()
 {
 	cout << "*************************************" << endl;
-	cout << "**********欢迎参加演讲比赛****** ****" << endl;
-	cout << "***********1.开始演讲比赛******* ****" << endl;
+	cout << "**********欢迎参加项目评优****** ****" << endl;
+	cout << "***********1.开始项目评优******* ****" << endl;
 	cout << "***********2.查看往届记录************" << endl;
-	cout << "***********3.清空比赛记录************" << endl;
-	cout << "***********0.退出比赛程序************" << endl;
+	cout << "***********3.清空评优记录************" << endl;
+	cout << "***********0.退出评优程序************" << endl;
 	cout << "*************************************" << endl;
 	cout << endl;
 }
 
-void SpeechManager::exitSystem()
+void ProjectManager::exitSystem()
 {
 	cout << "欢迎下次使用" << endl;
 	system("pause");
 	exit(0);
 }
 
-void SpeechManager::initSpeech()
+void ProjectManager::initEvaluation()
 {
 	v1.clear();
 	v2.clear();
 	vVictory.clear();
-	m_Speaker.clear();
+	m_Project.clear();
 	m_Index = 1;
 	m_Record.clear();
 }
 
-void SpeechManager::createSpeaker()
+void ProjectManager::createProject()
 {
 	string nameSeed = "ABCDEFGHIJKL";
 	for (int i = 0; i < nameSeed.size(); i++)
 	{
-		//姓名
-		string name = "选手";
+		//名称
+		string name = "项目";
 		name += nameSeed[i];
 
-		//speaker初始化姓名与分数
-		Speaker sp;
+		//speaker初始化名称与分数
+		Project sp;
 		sp.m_Name = name;
 		sp.m_Score[0] = 0;
 		sp.m_Score[1] = 0;
 
 		//初始化vector和map
 		v1.push_back(i + 10001);
-		m_Speaker.insert(pair<int, Speaker>(i + 10001,sp));
+		m_Project.insert(pair<int, Project>(i + 10001,sp));
 	}
 }
 
-void SpeechManager::startSpeech()
+void ProjectManager::startEvaluation()
 {
-	//第一轮比赛
+	//第一轮评优
 	//1.抽签
-	speechDraw();
+	evaluationDraw();
 	
-	//2.比赛
-	speechContest();
+	//2.评优
+	evaluationContest();
 
 	//3.显示晋级结果
 	showResult();
 
-	//第二轮比赛
+	//第二轮评优
 	//1.抽签
-	speechDraw();
+	evaluationDraw();
 
-	//2.比赛
-	speechContest();
+	//2.评优
+	evaluationContest();
 
 	//3.显示最终结果
 	showResult();
@@ -88,14 +88,14 @@ void SpeechManager::startSpeech()
 	saveRecord();
 
 	//重新初始化
-	initSpeech();
-	createSpeaker();
+	initEvaluation();
+	createProject();
 	loadRecord();
 }
 
-void SpeechManager::speechDraw()
+void ProjectManager::evaluationDraw()
 {
-	cout << "第" << m_Index << "轮选手正在抽签" << endl;
+	cout << "第" << m_Index << "轮项目正在抽签" << endl;
 	if (m_Index == 1)
 	{
 		random_shuffle(v1.begin(), v1.end());
@@ -117,10 +117,10 @@ void SpeechManager::speechDraw()
 	system("pause");
 }
 
-void SpeechManager::speechContest()
+void ProjectManager::evaluationContest()
 {
 	srand((unsigned int)time(NULL));
-	cout << "第" << m_Index << "轮比赛正式开始" << endl;
+	cout << "第" << m_Index << "轮评优正式开始" << endl;
 
 	vector<int> v_Src; //优化：新建了一个v_Src，第一轮 = v1，第二轮 = v2。其余的打分晋级代码通用
 	if (m_Index == 1)
@@ -139,7 +139,7 @@ void SpeechManager::speechContest()
 	//优化：添加greater<double>()使得从大到小排
 	multimap<double, int, greater<double>> groupScore;//记录分数和编号
 
-	//给所有比赛选手打分，分数放入维护的m_Speaker
+	//给所有评优项目打分，分数放入维护的m_Project
 	for (vector<int>::iterator it = v_Src.begin(); it != v_Src.end(); it++)
 	{
 		deque<double> d;//优化：改成了deque容器，然后用sort算法，可以更方便的去除做高分最低分
@@ -151,20 +151,20 @@ void SpeechManager::speechContest()
 		sort(d.begin(), d.end());
 		d.pop_back();
 		d.pop_front();
-		//平均分即该选手得分
+		//平均分即该项目得分
 		double sum = accumulate(d.begin(),d.end(),0.0f);//优化：改用了STL的accumulate算法
 		double avg= sum / d.size();
-		m_Speaker[*it].m_Score[m_Index-1] = avg;//优化：取消通过m_Index-1判断轮数，直接用m_Index-1赋值
+		m_Project[*it].m_Score[m_Index-1] = avg;//优化：取消通过m_Index-1判断轮数，直接用m_Index-1赋值
 		groupScore.insert(pair<double, int>(avg, *it));
 		count++;//人数+1
 
 		if (count % 6 == 0)//满六个
 		{
 			//输出分数排名
-			cout << "第" << count / 6 << "组比赛名次" << endl;
+			cout << "第" << count / 6 << "组评优名次" << endl;
 			for (multimap<double, int, greater<double>>::iterator it= groupScore.begin();it!=groupScore.end();it++)
 			{
-				cout << "选手编号：" << (*it).second << "\t姓名：" << m_Speaker[(*it).second].m_Name << "\t分数：" << m_Speaker[(*it).second].m_Score[m_Index-1] << endl;
+				cout << "项目编号：" << (*it).second << "\t名称：" << m_Project[(*it).second].m_Name << "\t分数：" << m_Project[(*it).second].m_Score[m_Index-1] << endl;
 			}
 			//实现晋级
 			int num = 0;
@@ -185,9 +185,9 @@ void SpeechManager::speechContest()
 	}
 }
 
-void SpeechManager::showResult()
+void ProjectManager::showResult()
 {
-	cout << "第" << m_Index << "轮晋级选手" << endl;
+	cout << "第" << m_Index << "轮晋级项目" << endl;
 	if (m_Index == 1)//显示第一轮晋级结果
 	{
 		int i = 0;
@@ -195,13 +195,13 @@ void SpeechManager::showResult()
 		{
 			if (i < 3)
 			{
-				if(i==0)cout << "第一组晋级选手：" << endl;
-				cout << "选手编号：" << *it << "\t选手姓名：" << (m_Speaker.find(*it))->second.m_Name << "\t选手得分：" << (m_Speaker.find(*it))->second.m_Score[0] << endl;
+				if(i==0)cout << "第一组晋级项目：" << endl;
+				cout << "项目编号：" << *it << "\t项目名称：" << (m_Project.find(*it))->second.m_Name << "\t项目得分：" << (m_Project.find(*it))->second.m_Score[0] << endl;
 			}
 			else
 			{
-				if(i==3)cout << "第二组晋级选手：" << endl;
-				cout << "选手编号：" << *it << "\t选手姓名：" << (m_Speaker.find(*it))->second.m_Name << "\t选手得分：" << (m_Speaker.find(*it))->second.m_Score[0] << endl;
+				if(i==3)cout << "第二组晋级项目：" << endl;
+				cout << "项目编号：" << *it << "\t项目名称：" << (m_Project.find(*it))->second.m_Name << "\t项目得分：" << (m_Project.find(*it))->second.m_Score[0] << endl;
 			}
 		}
 		m_Index = 2;
@@ -210,18 +210,18 @@ void SpeechManager::showResult()
 	{
 		for (vector<int>::iterator it = vVictory.begin(); it != vVictory.end(); it++)
 		{
-			cout << "选手编号：" << *it << "\t选手姓名：" << (m_Speaker.find(*it))->second.m_Name << "\t选手得分：" << (m_Speaker.find(*it))->second.m_Score[1] << endl;
+			cout << "项目编号：" << *it << "\t项目名称：" << (m_Project.find(*it))->second.m_Name << "\t项目得分：" << (m_Project.find(*it))->second.m_Score[1] << endl;
 		}
 	}
 }
 
-void SpeechManager::saveRecord()
+void ProjectManager::saveRecord()
 {
 	ofstream ofs;
-	ofs.open("speech.csv",ios::out|ios::app);//csv以逗号分隔
+	ofs.open("evaluation.csv",ios::out|ios::app);//csv以逗号分隔
 	for (vector<int>::iterator it = vVictory.begin(); it != vVictory.end(); it++)
 	{
-		ofs << *it << "," << m_Speaker[*it].m_Score[1] << ",";
+		ofs << *it << "," << m_Project[*it].m_Score[1] << ",";
 	}
 	ofs << endl;
 	ofs.close();
@@ -229,9 +229,9 @@ void SpeechManager::saveRecord()
 	system("pause");
 }
 
-void SpeechManager::loadRecord()
+void ProjectManager::loadRecord()
 {
-	ifstream ifs("speech.csv", ios::in);
+	ifstream ifs("evaluation.csv", ios::in);
 	//文件不存在的情况
 	if (!ifs.is_open())
 	{
@@ -279,7 +279,7 @@ void SpeechManager::loadRecord()
 	ifs.close();
 }
 
-void SpeechManager::showRecord()
+void ProjectManager::showRecord()
 {
 	if (fileIsEmpty)
 	{
@@ -298,7 +298,7 @@ void SpeechManager::showRecord()
 	system("pause");
 }
 
-void SpeechManager::clearRecord()
+void ProjectManager::clearRecord()
 {
 	cout << "是否确认清空" << endl;
 	cout << "1、是" << endl;
@@ -310,10 +310,10 @@ void SpeechManager::clearRecord()
 	if (select == 1)
 	{
 		ofstream ofs;
-		ofs.open("speech.csv", ios::trunc);
+		ofs.open("evaluation.csv", ios::trunc);
 		ofs.close();
-		initSpeech();
-		createSpeaker();
+		initEvaluation();
+		createProject();
 		loadRecord();
 		cout << "清空成功" << endl;
 		system("pause");
